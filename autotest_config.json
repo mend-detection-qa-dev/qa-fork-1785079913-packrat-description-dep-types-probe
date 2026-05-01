@@ -8,7 +8,7 @@
       "security_scan_report_conclusion": "success",
       "_comment_security_scan_report_conclusion": "Optional. Expected scan report conclusion. Options: 'success' | 'failure'. This validates the security scan result status. If not provided, this check will not be performed.",
       "total_libs_scanned": {
-        "gte": 31
+        "gte": 32
       },
       "_comment_total_libs_scanned": "Optional. Expected number of libraries scanned with comparison operator. Validates that the scan processed libraries. If not provided, this check will not be performed.",
       "expected_messages": [],
@@ -25,27 +25,32 @@
       "check_update_request_sca_results": true,
       "_comment_check_update_request_sca_results": "Whether to validate extraProperties.scaResults from the update request. Parses scaResults as JSON and asserts: (1) totalFail is empty {}, (2) no results entry has level 'ERROR'. Options: true | false. Default: false",
       "expected_total_dependencies_number": {
-        "gte": 16
+        "gte": 37
       },
       "expected_direct_dependencies_number": {
-        "eq": 3
+        "eq": 5
       },
       "expected_transitive_dependencies_number": {
-        "gte": 13
+        "gte": 32
       },
       "_comment_expected_dependencies_number": "Optional. Expected number of dependencies with comparison operator. Operators: gt (>), gte (>=), lt (<), lte (<=), eq (==). If not provided, this check will not be performed.",
       "direct_dependencies_names_list": {
         "eq": [
-          "Rcpp",
-          "ggplot2",
-          "jsonlite"
+          "ggplot2_4.0.3.tar.gz",
+          "knitr_1.51.tar.gz",
+          "packrat_0.9.3.tar.gz",
+          "rcpp_1.1.1-1.1.tar.gz",
+          "testthat_3.3.2.tar.gz"
         ]
       },
       "transitive_dependencies_names_list": {
-        "nin": [
-          "R",
-          "testthat",
-          "knitr"
+        "contains": [
+          "R6_2.6.1.tar.gz",
+          "jsonlite_2.0.0.tar.gz",
+          "S7_0.2.2.tar.gz",
+          "cpp11_0.5.4.tar.gz",
+          "xfun_0.57.tar.gz",
+          "yaml_2.3.12.tar.gz"
         ]
       },
       "_comment_dependencies_names_list": "Optional. Check specific libraries in direct dependencies. Operators: eq (==), contains (all items from expected list in actual), in(all items from actual list in expected), nin(actual list does not contain provided libs). If not provided, this check will not be performed.",
@@ -60,7 +65,21 @@
       "expected_plugin_version": "",
       "_comment_agent_versions": "Optional. Expected agent and plugin versions. If not provided, this check will not be performed.",
       "validate_mend_tags": false,
-      "_comment_validate_mend_tags": "Whether to validate project tags from Mend Platform BFF API against update request extraProperties. Options: true | false. Default: false. When true, calls the BFF projects/summaries endpoint and cross-validates sourceUrl, repoId, CTX, commitId, repoFullName tags against extraProperties (owner, commitId, branchName, repository)."
+      "_comment_validate_mend_tags": "Whether to validate project tags from Mend Platform BFF API against update request extraProperties. Options: true | false. Default: false. When true, calls the BFF projects/summaries endpoint and cross-validates sourceUrl, repoId, CTX, commitId, repoFullName tags against extraProperties (owner, commitId, branchName, repository).",
+      "validate_checksums": false,
+      "_comment_validate_checksums": "Whether to validate SHA1 checksums of dependencies. Options: true | false. Default: false. When true, runs the checks configured in checksums_config.",
+      "checksums_config": {
+        "check_sha1_not_empty": false,
+        "_comment_check_sha1_not_empty": "Validate that all dependencies have non-empty sha1 and/or checksums.SHA1 fields. Catches missing SHA1 values. Options: true | false. Default: false",
+        "check_sha1_format": false,
+        "_comment_check_sha1_format": "Validate that all SHA1 values are valid 40-character lowercase hex strings. Catches malformed SHA1 values. Options: true | false. Default: false",
+        "check_sha1_consistency": false,
+        "_comment_check_sha1_consistency": "Validate that dep.sha1 matches dep.checksums.SHA1 when both are present. Catches internal inconsistencies. Options: true | false. Default: false",
+        "check_checksums_by_formula": false,
+        "_comment_check_checksums_by_formula": "Recompute SHA1/additionalSha1 using the known per-PM formula and compare against actual values. Supported types: SWIFT (groupId_commit_SWIFT / groupId_version_SWIFT), NPM/YARN (name_version_NPM), PYTHON (name_version_PYTHON), JAVA/MAVEN/GRADLE (groupId_artifactId_version_JAVA), GO (artifactId_versionOrCommit_GO), NUGET/PAKET (_NUGET), CRATE, RUBY, PHP, COCOAPODS, PUB, CABAL, HEX, OPAM, CONDA, R. Options: true | false. Default: false",
+        "expected_dependency_checksums": [],
+        "_comment_expected_dependency_checksums": "Optional. List of specific dependencies with expected SHA1 values. Each entry: {'artifactId': 'pkg-name', 'version': '1.0.0', 'expected_sha1': '<40-char-hex>', 'expected_sha1_other_platform': '<40-char-hex>'}. Version is optional (matches any version if empty). Catches SHA1 regression when scanner changes checksum computation (see TKA-10186). If not provided, this check will not be performed."
+      }
     },
     "validate_vulnerabilities_table": false,
     "_comment_validate_vulnerabilities_table": "Whether to validate the vulnerabilities table. Options: true | false. Default: true",
