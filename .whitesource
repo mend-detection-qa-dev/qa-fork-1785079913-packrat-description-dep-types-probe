@@ -9,7 +9,7 @@
     }
   },
   "scanSettingsSAST": {
-    "enableScan": true,
+    "enableScan": false,
     "scanPullRequests": true,
     "incrementalScan": true,
     "findingSuppressions": "enabled",
@@ -36,7 +36,7 @@
   },
   "remediateSettings": {
     "workflowRules": {
-      "enabled": true
+      "enabled": false
     }
   },
   "imageSettings": {
